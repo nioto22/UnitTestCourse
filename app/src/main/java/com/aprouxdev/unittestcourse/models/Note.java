@@ -22,7 +22,7 @@ public class Note implements Parcelable {
     private String title;
     @ColumnInfo(name = "content")
     private String content;
-    @ColumnInfo(name = "title")
+    @ColumnInfo(name = "timestamp")
     private String timestamp;
 
 
