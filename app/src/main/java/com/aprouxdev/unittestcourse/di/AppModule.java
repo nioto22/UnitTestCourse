@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.aprouxdev.unittestcourse.persistence.NoteDao;
 import com.aprouxdev.unittestcourse.persistence.NoteDatabase;
+import com.aprouxdev.unittestcourse.repository.NoteRepository;
 
 import javax.inject.Singleton;
 
@@ -31,5 +32,11 @@ class AppModule {
     @Provides
     static NoteDao provideNoteDao(NoteDatabase noteDatabase){
         return noteDatabase.getNoteDao();
+    }
+
+    @Singleton
+    @Provides
+    static NoteRepository provideNoteRepository(NoteDao noteDao){
+        return new NoteRepository(noteDao);
     }
 }
