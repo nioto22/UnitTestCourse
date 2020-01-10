@@ -1,8 +1,9 @@
-package com.aprouxdev.unittestcourse;
+package com.aprouxdev.unittestcourse.ui.notesList;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.aprouxdev.unittestcourse.R;
 import com.aprouxdev.unittestcourse.repository.NoteRepository;
 
 import javax.inject.Inject;

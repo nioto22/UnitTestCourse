@@ -1,6 +1,6 @@
 package com.aprouxdev.unittestcourse.di;
 
-import com.aprouxdev.unittestcourse.NotesListActivity;
+import com.aprouxdev.unittestcourse.ui.notesList.NotesListActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
