@@ -1,10 +1,12 @@
-package com.aprouxdev.unittestcourse;
+package com.aprouxdev.unittestcourse.ui.note;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.aprouxdev.unittestcourse.R;
 
-public class NoteActivity extends AppCompatActivity {
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class NoteActivity extends DaggerAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,6 @@
 package com.aprouxdev.unittestcourse.di;
 
+import com.aprouxdev.unittestcourse.ui.note.NoteActivity;
 import com.aprouxdev.unittestcourse.ui.notesList.NotesListActivity;
 
 import dagger.Module;
@@ -10,4 +11,7 @@ public abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector
     abstract NotesListActivity contributeNotesListActivity();
+
+    @ContributesAndroidInjector
+    abstract NoteActivity contributeNoteActivity();
 }
