@@ -4,12 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Resource<T> {
+    // The ViewModel has got LiveData observe Repository/Dao action and return Resource<Integer>
+    // LiveData<Resource<Integer>> insertNote()
+
 
     @NonNull
     public final Status status;
+    // public enum Status { SUCCESS, ERROR, LOADING}
+
 
     @Nullable
     public final T data;
+    // Here is a Note
 
     @Nullable
     public final String message;
