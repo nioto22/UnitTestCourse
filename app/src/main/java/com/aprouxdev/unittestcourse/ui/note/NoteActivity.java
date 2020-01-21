@@ -73,7 +73,7 @@ public class NoteActivity extends DaggerAppCompatActivity implements
         subscribeObservers();
         setListeners();
 
-        if(savedInstanceState == null){  // in case of rotation
+        if(savedInstanceState == null){
             getIncomingIntent();
             enableEditMode();
         }
@@ -360,6 +360,3 @@ public class NoteActivity extends DaggerAppCompatActivity implements
         }
     }
 }
-
-
-

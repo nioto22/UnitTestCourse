@@ -1,6 +1,7 @@
 package com.aprouxdev.unittestcourse.di;
 
 import com.aprouxdev.unittestcourse.ui.note.NoteViewModel;
+import com.aprouxdev.unittestcourse.ui.notesList.NotesListViewModel;
 import com.aprouxdev.unittestcourse.viewmodels.ViewModelProviderFactory;
 
 import androidx.lifecycle.ViewModel;
@@ -20,6 +21,9 @@ public abstract class ViewModelFactoryModule {
     @ViewModelKey(NoteViewModel.class)
     public abstract ViewModel bindNoteViewModel(NoteViewModel noteViewModel);
 
-
+    @Binds
+    @IntoMap
+    @ViewModelKey(NotesListViewModel.class)
+    public abstract ViewModel bindNotesListViewModel(NotesListViewModel noteViewModel);
 
 }
