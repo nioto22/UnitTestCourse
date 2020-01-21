@@ -4,12 +4,15 @@ import com.aprouxdev.unittestcourse.models.Note;
 import com.aprouxdev.unittestcourse.persistence.NoteDao;
 import com.aprouxdev.unittestcourse.ui.Resource;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -26,7 +29,7 @@ public class NoteRepository {
     public static final String INSERT_SUCCESS = "Insert success";
     public static final String INSERT_FAILURE = "Insert failure";
 
-    private long timeDelay = 0;
+    private int timeDelay = 0;
     private TimeUnit timeUnit = TimeUnit.SECONDS;
 
     // inject
@@ -39,14 +42,15 @@ public class NoteRepository {
     }
 
 
-    public Flowable<Resource<Integer>> insertNote(final Note note) throws Exception {
+    public Flowable<Resource<Integer>> insertNote(final Note note) throws Exception{
+
         checkTitle(note);
 
         return noteDao.insertNote(note)
-                .delaySubscription(timeDelay, timeUnit)  // delay at 0, only used for testing
-                .map(new Function<Long, Integer>() {   // NoteDao.insertNote return Long as ?row number?
+                .delaySubscription(timeDelay, timeUnit)
+                .map(new Function<Long, Integer>() {
                     @Override
-                    public Integer apply(Long aLong) throws Exception{
+                    public Integer apply(Long aLong) throws Exception {
                         long l = aLong;
                         return (int)l;
                     }
@@ -57,10 +61,10 @@ public class NoteRepository {
                         return -1;
                     }
                 })
-                .map(new Function<Integer, Resource<Integer>>() {  // Map the result to a Resource constant value
+                .map(new Function<Integer, Resource<Integer>>() {
                     @Override
                     public Resource<Integer> apply(Integer integer) throws Exception {
-                        if(integer >0){
+                        if(integer > 0){
                             return Resource.success(integer, INSERT_SUCCESS);
                         }
                         return Resource.error(null, INSERT_FAILURE);
@@ -68,14 +72,15 @@ public class NoteRepository {
                 })
                 .subscribeOn(Schedulers.io())
                 .toFlowable();
-
     }
 
+
     public Flowable<Resource<Integer>> updateNote(final Note note) throws Exception{
+
         checkTitle(note);
 
         return noteDao.updateNote(note)
-                .delaySubscription(timeDelay, timeUnit)  // Only for testing
+                .delaySubscription(timeDelay, timeUnit)
                 .onErrorReturn(new Function<Throwable, Integer>() {
                     @Override
                     public Integer apply(Throwable throwable) throws Exception {
@@ -85,7 +90,8 @@ public class NoteRepository {
                 .map(new Function<Integer, Resource<Integer>>() {
                     @Override
                     public Resource<Integer> apply(Integer integer) throws Exception {
-                        if (integer > 0){
+
+                        if(integer > 0){
                             return Resource.success(integer, UPDATE_SUCCESS);
                         }
                         return Resource.error(null, UPDATE_FAILURE);
@@ -95,12 +101,46 @@ public class NoteRepository {
                 .toFlowable();
     }
 
-
-    private void checkTitle(Note note) throws Exception {
+    private void checkTitle(Note note) throws Exception{
         if(note.getTitle() == null){
             throw new Exception(NOTE_TITLE_NULL);
         }
     }
 
+    public LiveData<Resource<Integer>> deleteNote(final Note note) throws Exception{
+
+        checkId(note);
+
+        return LiveDataReactiveStreams.fromPublisher(
+                noteDao.deleteNote(note)
+                        .onErrorReturn(new Function<Throwable, Integer>() {
+                            @Override
+                            public Integer apply(Throwable throwable) throws Exception {
+                                return -1;
+                            }
+                        })
+                        .map(new Function<Integer, Resource<Integer>>() {
+                            @Override
+                            public Resource<Integer> apply(Integer integer) throws Exception {
+                                if(integer > 0){
+                                    return Resource.success(integer, DELETE_SUCCESS);
+                                }
+                                return Resource.error(null, DELETE_FAILURE);
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .toFlowable()
+        );
+    }
+
+    public LiveData<List<Note>> getNotes(){
+        return noteDao.getNotes();
+    }
+
+    private void checkId(Note note) throws Exception{
+        if(note.getId() < 0){
+            throw new Exception(INVALID_NOTE_ID);
+        }
+    }
 
 }
